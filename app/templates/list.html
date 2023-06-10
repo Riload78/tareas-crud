@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message  in messages %}
+                <h2>{{ message }}</h2>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    {{name}}
+    <h1>ListTasks</h1>
+    <form action="/new" method="POST">
+        <input type="text" name="title" id="" placeholder="Write title">
+        <input type="text" name="description" id="" placeholder="Write description">
+        
+        <button>Safe</button>
+    </form>
+    <div>
+       
+        {% for task in tasks %}
+        <div>
+            <h4>{{ task.title }}</h4>
+            <div>
+              
+            </div>
+            <p>{{ task.description }}</p>
+            
+        </div>
+        {% endfor %}
+    </div>
+    
+</body>
+</html>
