@@ -1,5 +1,5 @@
 
-from flask import Blueprint,render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, request, redirect, url_for, flash
 import datetime
 from models.entities.task import Task
 from flask_login import login_required, current_user
@@ -41,7 +41,7 @@ def update(id):
 
         db.session.commit()
         
-        return redirect(url_for('taks.index'))
+        return redirect(url_for('tasks.list_tasks'))
     
     
     return render_template('update.html', task=task)

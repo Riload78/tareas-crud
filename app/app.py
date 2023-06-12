@@ -1,7 +1,6 @@
 from flask import Flask
 from routes.tasks import tasks
 from routes.auth import auth
-from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from config import DevelopmentConfig
 from models.entities.task import User

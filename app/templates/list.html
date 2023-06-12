@@ -1,40 +1,94 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for message  in messages %}
-                <h2>{{ message }}</h2>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
+{% extends './layout.html' %}
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <h2>{{ message }}</h2>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+{% block content %}
     {{name}}
     <h1>ListTasks</h1>
     <form action="/new" method="POST">
-        <input type="text" name="title" id="" placeholder="Write title">
-        <input type="text" name="description" id="" placeholder="Write description">
-        
-        <button>Safe</button>
-    </form>
-    <div>
        
-        {% for task in tasks %}
-        <div>
-            <h4>{{ task.title }}</h4>
-            <div>
-              
-            </div>
-            <p>{{ task.description }}</p>
-            
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1">Título</span>
+            <input type="text" name="title" class="form-control" aria-label="Username" aria-describedby="basic-addon1">
         </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text">Descripción</span>
+            <textarea class="form-control" name="description" aria-label="With textarea"></textarea>
+          </div>
+        <div class="action mb-3">
+            <button class="btn btn-warning mb-3">Safe</button>
+        </div>
+    </form>
+
+    <div class="row" data-masonry='{"percentPosition": true }'>
+        {% for task in tasks %}
+            <div class="col-sm-6 col-lg-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ task.title }}</h5>
+                        <p class="card-text">{{ task.description }}</p>
+                        <p class="card-text"><small class="text-body-secondary">{{ task.updated_at}}</small></p>
+                        <p class="card-text"><small class="text-body-secondary">{{ task.status}}</small></p>
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <a class="icon-link" href=""><i class="bi bi-trash-fill"></i></a>
+                                <!-- Button trigger modal -->
+                                <button id="edit-task" type="button" class="link" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ task.id }}">
+                                    <i class="bi bi-pencil-fill"></i>
+                                </button>
+                                
+                                <!-- Modal -->
+                                <div class="modal fade" id="staticBackdrop-{{ task.id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="staticBackdropLabel">Actualizar</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form action="/update/{{task.id}}" method="POST">
+                
+                                                    <div class="input-group mb-3">
+                                                        <span class="input-group-text" id="basic-addon1">Título</span>
+                                                        <input type="text" name="title" class="form-control" aria-label="Username" aria-describedby="basic-addon1" value="{{ task.title }}">
+                                                    </div>
+                                                    <div class="input-group mb-3">
+                                                        <span class="input-group-text">Descripción</span>
+                                                        <textarea class="form-control" name="description" aria-label="With textarea" rows="5" maxlength='1000'>{{ task.description }} Hoala</textarea>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                                        <button type="submit" class="btn btn-warning">Actualizar</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="dropdown">
+                                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                      Dropdown link
+                                    </a>
+                                  
+                                    <ul class="dropdown-menu">
+                                      <li><a class="dropdown-item" href="#">Action</a></li>
+                                      <li><a class="dropdown-item" href="#">Another action</a></li>
+                                      <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                    </ul>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         {% endfor %}
     </div>
-    
-</body>
-</html>
+
+    {% endblock %}

@@ -19104,4 +19104,8 @@ textarea.form-control-lg {
   border-top-right-radius: 0;
 }
 
+i[class*=bi-] {
+  color: #ffc107;
+}
+
 /*# sourceMappingURL=main.css.map */
