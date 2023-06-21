@@ -25,24 +25,24 @@
     </form>
 
     <div class="row" data-masonry='{"percentPosition": true }'>
-        {% for task in tasks %}
+        {% for task in tasks %} 
             <div class="col-sm-6 col-lg-4 mb-4">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">{{ task.title }}</h5>
-                        <p class="card-text">{{ task.description }}</p>
-                        <p class="card-text"><small class="text-body-secondary">{{ task.updated_at}}</small></p>
-                        <p class="card-text"><small class="text-body-secondary">{{ task.status}}</small></p>
+                        <h5 class="card-title">{{ task[0].title }}</h5>
+                        <p class="card-text">{{ task[0].description }}</p>
+                        <p class="card-text"><small class="text-body-secondary">{{ task[0].updated_at}}</small></p>
+                        <p class="card-text"><small class="text-body-secondary">{{ task[1] }}</small></p>
                         <div class="row align-items-center">
                             <div class="col">
                                 <a class="icon-link" href=""><i class="bi bi-trash-fill"></i></a>
                                 <!-- Button trigger modal -->
-                                <button id="edit-task" type="button" class="link" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ task.id }}">
+                                <button id="edit-task" type="button" class="link" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ task[0].id }}">
                                     <i class="bi bi-pencil-fill"></i>
                                 </button>
                                 
                                 <!-- Modal -->
-                                <div class="modal fade" id="staticBackdrop-{{ task.id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                <div class="modal fade" id="staticBackdrop-{{ task[0].id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -50,15 +50,15 @@
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
-                                                <form action="/update/{{task.id}}" method="POST">
+                                                <form action="/update/{{task[0].id}}" method="POST">
                 
                                                     <div class="input-group mb-3">
                                                         <span class="input-group-text" id="basic-addon1">Título</span>
-                                                        <input type="text" name="title" class="form-control" aria-label="Username" aria-describedby="basic-addon1" value="{{ task.title }}">
+                                                        <input type="text" name="title" class="form-control" aria-label="Título" aria-describedby="basic-addon1" value="{{ task[0].title }}">
                                                     </div>
                                                     <div class="input-group mb-3">
                                                         <span class="input-group-text">Descripción</span>
-                                                        <textarea class="form-control" name="description" aria-label="With textarea" rows="5" maxlength='1000'>{{ task.description }} Hoala</textarea>
+                                                        <textarea class="form-control" name="description" aria-label="With textarea" rows="5" maxlength='1000'>{{ task[0].description }}</textarea>
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -73,13 +73,14 @@
                             <div class="col">
                                 <div class="dropdown">
                                     <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                      Dropdown link
+                                      {{ task[1]}}
                                     </a>
                                   
                                     <ul class="dropdown-menu">
-                                      <li><a class="dropdown-item" href="#">Action</a></li>
-                                      <li><a class="dropdown-item" href="#">Another action</a></li>
-                                      <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                        {% for statu in status %}
+                                            <li><a class="dropdown-item" href="#">{{statu.name}}</a></li>
+                                        {% endfor %}
+                                     
                                     </ul>
                                 </div>
                                 

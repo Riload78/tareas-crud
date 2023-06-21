@@ -4,15 +4,15 @@ from routes.auth import auth
 from flask_login import LoginManager
 from config import DevelopmentConfig
 from models.entities.task import User
+
 app = Flask(__name__)
 
 app.secret_key = DevelopmentConfig.SECRET_KEY
-print(app.secret_key)
+
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:root@localhost/tasks_db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config["SQLALCHEMY_ECHO"] = True
 app.config["SQLALCHEMY_RECORD_QUERIES"] = True
-
 
 app.register_blueprint(tasks)
 app.register_blueprint(auth)
