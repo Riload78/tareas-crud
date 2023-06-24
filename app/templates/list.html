@@ -1,14 +1,25 @@
 {% extends './layout.html' %}
-{% with messages = get_flashed_messages() %}
-    {% if messages %}
-        {% for message in messages %}
-            <h2>{{ message }}</h2>
-        {% endfor %}
-    {% endif %}
-{% endwith %}
+
+{% block title %} Tareas {% endblock %}
+
+
 {% block content %}
-    {{name}}
+
     <h1>ListTasks</h1>
+    <div class="container">
+        <div class="row">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message  in messages %}
+                        <div class="alert {{ category }}" role="alert">
+                            {{ message }} 
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+    </div>
+   
     <form action="/new" method="POST">
        
         <div class="input-group mb-3">
@@ -32,16 +43,18 @@
                         <h5 class="card-title">{{ task[0].title }}</h5>
                         <p class="card-text">{{ task[0].description }}</p>
                         <p class="card-text"><small class="text-body-secondary">{{ task[0].updated_at}}</small></p>
-                        <p class="card-text"><small class="text-body-secondary">{{ task[1] }}</small></p>
-                        <div class="row align-items-center">
-                            <div class="col">
-                                <a class="icon-link" href=""><i class="bi bi-trash-fill"></i></a>
+                        <div class="row align-items-center d-flex justify-content-between">
+                            <div class="col d-flex gap-3">
                                 <!-- Button trigger modal -->
-                                <button id="edit-task" type="button" class="link" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ task[0].id }}">
+                                <a id="edit-task" class="link" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{ task[0].id }}">
                                     <i class="bi bi-pencil-fill"></i>
-                                </button>
+                                </a>
+                                <a id="edit-status" class="link" data-bs-toggle="modal" data-bs-target="#status-{{ task[0].id }}">
+                                    <i class="bi bi-list-task"></i>
+                                </a>
+                                <a class="icon-link" href="/delete/{{task[0].id}}"><i class="bi bi-trash-fill"></i></a>
                                 
-                                <!-- Modal -->
+                                <!-- Modal Update task -->
                                 <div class="modal fade" id="staticBackdrop-{{ task[0].id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
@@ -69,21 +82,41 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col">
-                                <div class="dropdown">
-                                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                      {{ task[1]}}
-                                    </a>
-                                  
-                                    <ul class="dropdown-menu">
-                                        {% for statu in status %}
-                                            <li><a class="dropdown-item" href="#">{{statu.name}}</a></li>
-                                        {% endfor %}
-                                     
-                                    </ul>
-                                </div>
                                 
+                                <!-- Modal Update status-->
+                                <div class="modal fade" id="status-{{ task[0].id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="staticBackdropLabel">Actualizar</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form action="/update-status/{{task[0].id}}" method="post">
+                                            
+                                                    {% for state in status %}
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="status" id="{{state.id}}" value="{{state.id}}" />
+                                                            <label class="form-check-label" for="flexRadioDefault1">
+                                                                {{state.name}}
+                                                            </label>
+                                                        </div>
+                                                    {% endfor %}
+                                            
+    
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                                        <button type="submit" class="btn btn-warning">Actualizar</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col d-flex justify-content-end">
+                                <span class="badge rounded-pill text-bg-warning">{{ task[1] }}</span>
                             </div>
                         </div>
                     </div>

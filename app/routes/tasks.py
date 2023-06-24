@@ -5,6 +5,7 @@ from models.entities.task import Task, Status
 from flask_login import login_required, current_user
 from utils.db import db
 
+
 tasks = Blueprint('tasks',__name__)
 
 @tasks.route('/list')
@@ -31,7 +32,7 @@ def new_task():
     db.session.add(new_task)
     db.session.commit()
     
-    flash('Task added succesfully')
+    flash('Task added succesfully', 'alert-success')
     return redirect(url_for('tasks.list_tasks'))
 
 
@@ -39,7 +40,7 @@ def new_task():
 @login_required
 def update(id):
     task = Task.query.get(id)
-    print(task)
+
     if request.method == 'POST':
         date = datetime.datetime.utcnow()
         task.title = request.form['title']
@@ -47,16 +48,29 @@ def update(id):
         task.updated_at = date
 
         db.session.commit()
-        
+        flash('Tarea actualizado correctamente', 'alert-success')
         return redirect(url_for('tasks.list_tasks'))
     
     
     return render_template('update.html', task=task)
+
+@tasks.route('/update-status/<id>', methods=['POST', 'GET'])
+@login_required
+def update_status(id):
+    task = Task.query.get(id)
+
+    if request.method == 'POST':
+        task.status_id = request.form.get('status')
+        print(request.form, id)
+        
+        db.session.commit()
+        flash('Se actualizado el estado de la tarea', 'alert-success')
+        return redirect(url_for('tasks.list_tasks'))
 
 @tasks.route('/delete/<id>')
 def delete(id):
     contact = Task.query.get(id)
     db.session.delete(contact)
     db.session.commit()
-    flash('Contact Deleted succesfully')
-    return redirect(url_for('contacts.index'))
+    flash('Tarea eliminada correctamente','alert-success')
+    return redirect(url_for('tasks.list_tasks'))

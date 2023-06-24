@@ -2,10 +2,13 @@ from flask import Blueprint,render_template, request, redirect, url_for, flash
 from models.entities.task import User
 from helpers.helper import create_password
 from utils.db import db
-from flask_login import login_user, logout_user, login_required, current_user
+from config import Config
+from flask_login import login_user, logout_user, login_required
+from flask_mail import Mail, Message
+from controller.email import Sendmail
 
 auth = Blueprint('auth',__name__)
-
+""" mail = Mail() """
 @auth.route('/')
 def index():
     return redirect(url_for('auth.login'))
@@ -30,7 +33,12 @@ def register():
         
             db.session.add(new_user)
             db.session.commit()
+            
             flash('Gracias por registrarte.', 'alert-success')
+            
+            email = Sendmail('Bienvenido a Task List', [new_user.email])
+            email.send_email('email/email_register.html', user = new_user.username)
+            
     
     return render_template('auth/register.html')
 

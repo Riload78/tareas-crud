@@ -14,8 +14,10 @@
         {% endif %}
     {% endwith %}
     <form action="/login" method="POST">
-      <img class="mb-4" src="/docs/5.3/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57">
-      <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+      
+      <div class="d-flex justify-content-center">
+        <h1 class="h3 mb-3 fw-normal">Iniciar sesión</h1>
+      </div>
   
       <div class="form-floating">
         <input type="email" class="form-control" id="floatingInput" name="email" placeholder="name@example.com">
@@ -32,8 +34,8 @@
           Remember me
         </label>
       </div>
-      <button class="btn btn-primary w-100 py-2" type="submit">Sign in</button>
-      <p class="mt-5 mb-3 text-body-secondary">&copy; 2017–2023</p>
+      <button class="btn btn-warning w-100 py-2" type="submit">Iniciar sesión</button>
+      <p class="mt-2 mb-3 text-body-secondary d-flex justify-content-center">Registrate <a class="link-warning" href="/register"> aqui</a></p>
     </form>
 </div>
 
