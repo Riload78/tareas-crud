@@ -41,7 +41,7 @@ class Task(db.Model):
        self.status_id = status_id
        self.create_at = create_at
        self.updated_at = updated_at
-       
+           
 class Status(db.Model):
     __tablename__ = 'status'
     id = db.Column(db.Integer, primary_key=True)

@@ -4,11 +4,10 @@ from helpers.helper import create_password
 from utils.db import db
 from config import Config
 from flask_login import login_user, logout_user, login_required
-from flask_mail import Mail, Message
 from controller.email import Sendmail
 
 auth = Blueprint('auth',__name__)
-""" mail = Mail() """
+
 @auth.route('/')
 def index():
     return redirect(url_for('auth.login'))
@@ -25,6 +24,7 @@ def register():
     if user:
         
         flash('Este usuario ya existe.', 'alert-danger')
+        
     else:
         if password:
 

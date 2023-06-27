@@ -1,10 +1,11 @@
 
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 import datetime
-from models.entities.task import Task, Status
+from models.entities.task import Task
 from flask_login import login_required, current_user
 from utils.db import db
-
+from controller.email import Sendmail
+from controller.queries import get_tasks, get_status, get_email
 
 tasks = Blueprint('tasks',__name__)
 
@@ -12,10 +13,8 @@ tasks = Blueprint('tasks',__name__)
 @login_required
 def list_tasks():
     
-    tasks = db.session.query(Task, Status.name).\
-        join(Status, Status.id == Task.status_id).\
-        filter(Task.user_id == current_user.id).all()
-    status = Status.query.all()
+    tasks = get_tasks()
+    status = get_status()
     
     return render_template('list.html', tasks=tasks, name=current_user.username, status=status)
     
@@ -61,10 +60,18 @@ def update_status(id):
 
     if request.method == 'POST':
         task.status_id = request.form.get('status')
+        task.user_id = request.form.get('user_id')
         print(request.form, id)
+        
         
         db.session.commit()
         flash('Se actualizado el estado de la tarea', 'alert-success')
+        user_email = get_email()
+
+        email = Sendmail('Actualización de estado', [user_email])
+        email.send_email('email/email_update_task.html', task=task)
+        
+            
         return redirect(url_for('tasks.list_tasks'))
 
 @tasks.route('/delete/<id>')
