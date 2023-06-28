@@ -19,3 +19,10 @@ def get_email():
     if user:
         email = user.email
     return email
+
+def task_filter(status):
+    taks = db.session.query(Task, Status.name).\
+        join(Status, Status.id == Task.status_id).\
+        filter(Task.user_id == current_user.id).\
+        filter(Status.name == status).all()
+    return taks

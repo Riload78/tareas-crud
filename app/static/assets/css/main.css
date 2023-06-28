@@ -19108,4 +19108,12 @@ i[class*=bi-] {
   color: #ffc107;
 }
 
+.terminada {
+  background: #479f76 !important;
+}
+
+.pendiente {
+  background: #e35d6a !important;
+}
+
 /*# sourceMappingURL=main.css.map */

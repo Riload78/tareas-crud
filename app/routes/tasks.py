@@ -5,7 +5,7 @@ from models.entities.task import Task
 from flask_login import login_required, current_user
 from utils.db import db
 from controller.email import Sendmail
-from controller.queries import get_tasks, get_status, get_email
+from controller.queries import get_tasks, get_status, get_email, task_filter
 
 tasks = Blueprint('tasks',__name__)
 
@@ -81,3 +81,11 @@ def delete(id):
     db.session.commit()
     flash('Tarea eliminada correctamente','alert-success')
     return redirect(url_for('tasks.list_tasks'))
+
+@tasks.route('/filter/<status>')
+@login_required
+def filter(status):
+    tasks = task_filter(status)
+    status = get_status()
+    
+    return render_template('filter.html', tasks=tasks, status=status)
